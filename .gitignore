@@ -1,5 +1,6 @@
 .env
 __pychache__
 .venv
-Input
-Output
+Image/Input
+Image/Output
+log.txt

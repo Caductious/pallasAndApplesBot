@@ -35,7 +35,7 @@ def applyTextToImage(filename, text):
         if memeText.index(part) >= len(memeText)//2:
             bottom += 1
         if bottom == 1:
-            h += height - (fontsize*len(memeText))
+            h += height - (fontsize*len(memeText)) - 10
         pos = (w, h)
         try:
             font = ImageFont.truetype("./fonts/Impact.ttf", fontsize)
@@ -46,4 +46,4 @@ def applyTextToImage(filename, text):
         h += fontsize
     filename = filename.split('/')[2]
     image.save(f"Image/Output/{filename}_final.jpg")
-    return "Image/Output/{filename}_final.jpg"
+    return f"Image/Output/{filename}_final.jpg"
