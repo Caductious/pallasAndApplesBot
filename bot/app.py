@@ -19,7 +19,10 @@ def downloadPhoto(url, user_id):
     response = requests.get(url)
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     filename = f"Image/Input/{user_id}_{timestamp}.jpg"
-
+    try:
+        os.makedirs("Image/Input")
+    except FileExistsError:
+        pass
     with open(filename, 'wb') as file:
         file.write(response.content)
     return filename
@@ -51,11 +54,13 @@ def textHandler(message):
             if user_data[user_id]['status'] == 'waiting_for_text':
 
                 user_data[user_id]['memeText'] = message.text
-                user_data[user_id]['memeText'] = user_data[user_id]['memeText'].replace("\n", " ")
                 with open("log.txt", "a") as log:
                     now = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
                     log.write(f"{now};text_message;{user_id};{user_data[user_id]['memeText']};success\n")    
-
+                    try:
+                        os.makedirs("Image/Output")
+                    except FileExistsError:
+                        pass
                 user_data[user_id]['final_path'] = meme.applyTextToImage(user_data[user_id]['source_path'], user_data[user_id]['memeText'])
                 user_data[user_id]['status']= 'ready'
 
@@ -100,7 +105,8 @@ def handle_photo(message):
     while user_data[user_id]['satus'] == "waiting" and user_data[user_id]['attempts'] <= 10:
         try:
             user_data[user_id]['source_path']  = downloadPhoto(url, user_id)
-            bot.send_message(user_id, "Картинка у меня! Теперь скинь текст")
+            bot.send_message(user_id, """Картинка у меня! Теперь скинь текст\n Если ты хочешь ОБЯЗАТЕЛЬНО разбить текст на 2 части то отправь текст с новой строкой например
+                              \n\ntop text\nbottom text\n если тебе всё равно, то отправь просто текст, который хочешь увидеть в меме""")
             user_data[user_id]['status'] = 'waiting_for_text'
             with open("log.txt", "a") as log:
                 now = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
