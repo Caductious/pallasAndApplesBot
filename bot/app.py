@@ -12,6 +12,7 @@ import time
 load_dotenv()
 
 token = os.getenv("BOT_TOKEN")
+print(token)
 bot = telebot.TeleBot(token)
 user_data = {}
 
